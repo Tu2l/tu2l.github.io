@@ -31,13 +31,36 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Checkout private repository
+        uses: actions/checkout@v4
+        with:
+          repository: tu2l/Zoltraak # Replace with the private repository owner/name
+          ref: tu2l.com # Replace with the branch name you want to pull
+          path: external_repo # The directory where the external repository will be checked out
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3  # Or the appropriate version
+        with:
+          node-version: '16'   # Or your required Node.js version
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./external_repo # adjust the path
+
+      - name: Build
+        run: npm run build
+        working-directory: ./external_repo # adjust the path
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # Upload the built static files
+          path: ./external_repo/out  # Replace with the actual path to your built static files
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
