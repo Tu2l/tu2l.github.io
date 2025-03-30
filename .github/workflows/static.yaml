@@ -42,7 +42,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3  # Or the appropriate version
         with:
-          node-version: '16'   # Or your required Node.js version
+          node-version: 'v22.14.0'   # Or your required Node.js version
 
       - name: Install dependencies
         run: npm install
